@@ -70,17 +70,17 @@ install_nginx() {
     echo "export PATH=${nginxDir}sbin:\$PATH" > /etc/profile.d/nginx194.sh
     . /etc/profile.d/nginx194.sh
     #下载nginx启动脚本和设置开机启动
-    downFile "http://www.05hd.com/wp-content/uploads/2014/12/Nginx-init-CentOS.sh" "/etc/rc.d/init.d/nginx" "Download Nginx Init File"
+    downFile "https://github.com/carlosxue/zabbix-s/blob/master/script-init-centos6" "/etc/rc.d/init.d/nginx" "Download Nginx Init File"
     chmod +x /etc/rc.d/init.d/nginx
     chkconfig --add nginx
     chkconfig nginx on
 }
  
 install_php() {
-    #下载 解压 编译 安装PHP5.5.20
-    cd && [ ! -f php-5.5.20.tar.gz ] && downFile "$1" "php-5.5.20.tar.gz" "Download PHP 5.5.20" 
-    tar xf php-5.5.20.tar.gz 
-    cd php-5.5.20
+    #下载 解压 编译 安装PHP5.6.13
+    cd && [ ! -f php-5.6.13.tar.gz ] && downFile "$1" "php-5.6.13.tar.gz" "Download PHP 5.6.13" 
+    tar xf php-5.6.13.tar.gz 
+    cd php-5.6.13
     ./configure  --prefix=${phpDir} \
 --with-config-file-path=${phpDir}etc \
 --with-bz2 \
@@ -110,8 +110,8 @@ install_php() {
     make -j $(awk '{if($1=="processor"){i++}}END{print i}' /proc/cpuinfo) && make install
     [ $? != 0 ] && exit 1
     #设置环境变量
-    echo "export PATH=${phpDir}bin:\$PATH" > /etc/profile.d/php5520.sh
-    . /etc/profile.d/php5520.sh
+    echo "export PATH=${phpDir}bin:\$PATH" > /etc/profile.d/php5613.sh
+    . /etc/profile.d/php5613.sh
     #检测php是否安装成功
     [ -z $(which php) ] && exit 1
     #拷贝配置文件
@@ -137,25 +137,25 @@ install_php() {
  
 install_cmake() {
     #下载 解压 编译 安装cmake
-    cd && [ ! -f cmake-3.1.0.tar.gz ] && downFile "$1" "cmake-3.1.0.tar.gz" "Download CMAKE 3.1.0"
-    tar xf cmake-3.1.0.tar.gz
-    cd cmake-3.1.0
+    cd && [ ! -f cmake-3.3.2.tar.gz ] && downFile "$1" "cmake-3.3.2.tar.gz" "Download CMAKE 3.3.2"
+    tar xf cmake-3.3.2.tar.gz
+    cd cmake-3.3.2
     ./configure --prefix=/usr/local/cmake --mandir=/usr/local/share/man --datadir=/usr/share/ --docdir=/usr/share/doc --no-system-libs --system-curl --no-system-libarchive --system-bzip2 --system-expat
     make -j $(awk '{if($1=="processor"){i++}}END{print i}' /proc/cpuinfo) && make install
     [ $? != 0 ] && exit 1
     #检测cmake是否ok，不ok 退出脚本
     [ $? != 0 ] && exit 1
-    echo "export PATH=/usr/local/cmake/bin:\$PATH" > /etc/profile.d/cmake310.sh
-    . /etc/profile.d/cmake310.sh
+    echo "export PATH=/usr/local/cmake/bin:\$PATH" > /etc/profile.d/cmake332.sh
+    . /etc/profile.d/cmake332.sh
 }
  
 install_mariadb() {
     #添加mysql系统用户和系统组
     findUidGid mysql
     #下载 解压 编译 安装MariaDB
-    cd && [ ! -f mariadb-10.0.15.tar.gz ] && downFile "$1" "mariadb-10.0.15.tar.gz" "Download MariaDB 10.0.15"
-    [ -f mariadb-10.0.15 ] && rm -rf mariadb-10.0.15
-    tar xf mariadb-10.0.15.tar.gz && cd mariadb-10.0.15
+    cd && [ ! -f mariadb-10.1.7.tar.gz ] && downFile "$1" "mariadb-10.1.7.tar.gz" "Download MariaDB 10.1.7"
+    [ -f mariadb-10.1.7 ] && rm -rf mariadb-10.1.7
+    tar xf mariadb-10.1.7.tar.gz && cd mariadb-10.1.7
     cmake . -DCMAKE_INSTALL_PREFIX=$mysqlDir \
 -DMYSQL_DATADIR=${mysqlDir}data/ \
 -DWITH_SSL=system \
@@ -195,8 +195,8 @@ install_mariadb() {
     cd ${mysqlDir}
     ${mysqlDir}scripts/mysql_install_db --user=mysql --datadir=${mysqlDir}data/
     #设置MariaDB的环境变量
-    echo "export PATH=${mysqlDir}bin:\$PATH" > /etc/profile.d/mariadb10015.sh
-    . /etc/profile.d/mariadb10015.sh
+    echo "export PATH=${mysqlDir}bin:\$PATH" > /etc/profile.d/mariadb1017.sh
+    . /etc/profile.d/mariadb1017.sh
     chkconfig --add mysqld
     chkconfig mysqld on
     #启动MariaDB
@@ -267,10 +267,10 @@ install_zabbix() {
 --with-libxml2
     make -j $(awk '{if($1=="processor"){i++}}END{print i}' /proc/cpuinfo) && make install
     [ $? != 0 ] && exit 1
-    echo "export PATH=/usr/local/zabbix/sbin:\$PATH" > /etc/profile.d/zabbix243.sh
-    . /etc/profile.d/zabbix243.sh
+    echo "export PATH=/usr/local/zabbix/sbin:\$PATH" > /etc/profile.d/zabbix246.sh
+    . /etc/profile.d/zabbix246.sh
     zabbixsrcDir="/root/zabbix-2.4.6"
-    . /etc/profile.d/mariadb10015.sh
+    . /etc/profile.d/mariadb1017.sh
     for i in schema.sql images.sql data.sql; do mysql -uroot -p$mysqlPass $zbmysqlName < ${zabbixsrcDir}/database/mysql/$i;done
     #[ -f /etc/zabbix ] || mkdir /etc/zabbix/
     zbserverconf="/etc/zabbix/zabbix_server.conf"

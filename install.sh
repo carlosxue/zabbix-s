@@ -1,7 +1,7 @@
 #!/bin/bash
 #########################################################################
 # File Name: zabbixserver.sh
-# Author: @oneas1a
+# Author: oneas1a
 # Email: carlosxue@oneas1a.com
 # Version:
 # Created Time: Tus Sep 22 00:00:00 CST 2015

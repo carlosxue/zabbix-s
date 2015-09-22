@@ -18,7 +18,7 @@
 nginxDir="/usr/local/nginx/"
 phpDir="/usr/local/php/"
 mysqlDir="/usr/local/mysql/"
-mysqlPass="oneas1a"
+mysqlPass="@oneas1a"
 zbmysqlName="zabbix"
 zbmysqlUser="zabbixuser"
 zbmysqlPass="zabbixpass"
